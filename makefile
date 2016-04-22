@@ -1,0 +1,37 @@
+CC=gcc
+EMCC=emcc
+CFLAGS= -g -Wall -Ideps -Wextra
+LDFLAGS=
+SOURCES=Main.c
+EXECUTABLEDEST=bin
+EXECUTABLE=program.o
+JSEXECUTABLE=program.js
+MONITOREXTENSIONS=c h
+MONITORTOOL=nodemon
+LIBS=
+INCLUDES=/usr/include /usr/lib/bbbgpio.o
+DEBUGGER=lldb
+REMOTEFOLDER =/home/debian/bb-temp/
+SYNCTOOL=rsync
+SYNCFLAGS = -rav * debian@192.168.2.2
+
+build:
+	$(CC) $(CFLAGS) $(SOURCES) -I $(INCLUDES) $^ $(LIBS) -o $(EXECUTABLEDEST)/$(EXECUTABLE)
+
+js:
+	$(EMCC) $(CFLAGS) $(SOURCES) -o $(EXECUTABLEDEST)/$(JSEXECUTABLE)
+
+clean:
+	rm $(EXECUTABLEDEST)/$(EXECUTABLE) $(EXECUTABLEDEST)/$(JSEXECUTABLE)
+
+watch:
+	$(MONITORTOOL) --exec "make build && ./$(EXECUTABLEDEST)/$(EXECUTABLE)" -e "$(MONITOREXTENSIONS)"
+
+watchjs:
+	$(MONITORTOOL) --exec "make js && node $(EXECUTABLEDEST)/$(JSEXECUTABLE)" -e "$(MONITOREXTENSIONS)"
+
+debug: build
+	$(DEBUGGER) $(EXECUTABLEDEST)/$(EXECUTABLE)
+
+deploy:
+	$(SYNCTOOL) $(SYNCFLAGS):$(REMOTEFOLDER)
