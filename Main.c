@@ -3,9 +3,6 @@
 #include <bbbgpio.h>
 #include <unistd.h>
 
-#define blueLed 60
-#define buttonPin 44
-
 double vtoc(double v) {
     double mv =  (v / 4096) * 1800;
     return (mv - 500) /10;

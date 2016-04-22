@@ -1,0 +1,15 @@
+Temperature reader for the TMP36 sensor using bb-gpio-lib.
+
+Dependencies:
+https://github.com/rdepena/bb-gpio-lib
+
+Build:
+> make
+
+Deploy to connected BeagleBone:
+> make deploy
+
+TODO:
+- Store raw data
+- Increase interval to 30 Mins
+- Create install scripts that turn this into a service.
