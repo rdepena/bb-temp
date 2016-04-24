@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <bbbgpio.h>
+#include <bbgpio.h>
 #include <unistd.h>
 
 double vtoc(double v) {
