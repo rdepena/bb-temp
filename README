@@ -10,6 +10,5 @@ Deploy to connected BeagleBone:
 > make deploy
 
 TODO:
-- Store raw data
-- Increase interval to 30 Mins
-- Create install scripts that turn this into a service.
+* Expose time interval to be configurable
+* Find better place for logs.
