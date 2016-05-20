@@ -1,6 +1,6 @@
 CC=gcc
 EMCC=emcc
-CFLAGS= -g -Wall -Ideps -Wextra
+CFLAGS= -g -Wall -Ideps -Wextra -std=c99
 LDFLAGS=
 SOURCES=Main.c
 EXECUTABLEDEST=bin

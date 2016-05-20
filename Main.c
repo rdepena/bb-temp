@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include <bbgpio.h>
-#include <unistd.h>
-#include <time.h>
+
+#define PIN 0
 
 double vtoc(double v) {
     double mv =  (v / 4096) * 1800;
@@ -13,36 +13,34 @@ double ctof(double c) {
     return ((c * 9) /5 ) + 32;
 }
 
-void logReadingToFile(char* file, double volts) {
-    time_t rawtime;
-    char buffer[256];
-    struct tm * timeinfo;
-    char timeBuffer[256];
-    double celsius = vtoc(volts);
-    double fahrenheit = ctof(celsius);
+typedef enum
+{
+    celsius,
+    fahrenheit
+} measurement;
 
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    strftime (timeBuffer,256,"%D %r",timeinfo);
-    sprintf(buffer, "%s\t%f\t%f\t%f\n", timeBuffer, volts, celsius, fahrenheit);
-    FILE *fd;
-
-    fd = fopen(file, "a");
-    fputs(buffer, fd);
-
-    fclose(fd);
+measurement unitOfMeasurement(int c, char** argv) {
+    for (int i =1; i < c; i++) {
+        if(strstr(argv[i], "-f")){
+            return fahrenheit;
+        }
+        else if (strstr(argv[i], "-c")){
+            return celsius;
+        }
+    }
+    return fahrenheit;
 }
 
-int main(void) {
-
+int main(int argc, char** argv) {
     loadADC();
-
-    while(1) {
-        logReadingToFile("temp-log", analogRead(0));
-
-        //sleep for 30 mins.
-        sleep(60 * 30);
+    double tmpInVolts = analogRead(PIN);
+    double tmpInC = vtoc(tmpInVolts);
+    measurement units = unitOfMeasurement(argc, argv);
+    if (units == celsius) {
+        printf("%4.2f\n", tmpInC);
+    } else {
+        printf("%4.2f\n", ctof(tmpInC));
     }
-
+    unLoadADC();
     return 0;
 }
