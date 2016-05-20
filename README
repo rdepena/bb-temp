@@ -10,5 +10,4 @@ Deploy to connected BeagleBone:
 > make deploy
 
 TODO:
-* Expose time interval to be configurable
-* Find better place for logs.
+Install scripts.
