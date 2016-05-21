@@ -4,8 +4,8 @@ CFLAGS= -g -Wall -Ideps -Wextra -std=c99
 LDFLAGS=
 SOURCES=Main.c
 EXECUTABLEDEST=bin
-EXECUTABLE=program.o
-JSEXECUTABLE=program.js
+EXECUTABLE=bb-temp
+JSEXECUTABLE=bb-temp.js
 MONITOREXTENSIONS=c h
 MONITORTOOL=nodemon
 LIBS=
@@ -14,6 +14,7 @@ DEBUGGER=lldb
 REMOTEFOLDER =/home/debian/bb-temp/
 SYNCTOOL=rsync
 SYNCFLAGS = -rav * debian@192.168.2.2
+INSTDEST=/usr/local
 
 build:
 	$(CC) $(CFLAGS) $(SOURCES) -I $(INCLUDES) $^ $(LIBS) -o $(EXECUTABLEDEST)/$(EXECUTABLE)
@@ -35,3 +36,9 @@ debug: build
 
 deploy:
 	$(SYNCTOOL) $(SYNCFLAGS):$(REMOTEFOLDER)
+
+install:
+	install $(EXECUTABLEDEST)/$(EXECUTABLE) $(INSTDEST)/$(EXECUTABLEDEST)/$(EXECUTABLE)
+
+uninstall:
+	rm -rf $(INSTDEST)/$(EXECUTABLEDEST)/$(EXECUTABLE)
